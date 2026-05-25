@@ -1,4 +1,2 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://surf.bunker-255.com/sitemap.xml
