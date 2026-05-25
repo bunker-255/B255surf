@@ -1,0 +1,6 @@
+{
+  "name": "Israel Surf & Wind Forecast",
+  "description": "Real-time wave and wind conditions in Israel with 7-day forecast, spot map, compass visuals, and optimal condition notifications.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

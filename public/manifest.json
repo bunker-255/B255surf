@@ -1,0 +1,17 @@
+{
+  "name": "Bunker-255 Surf",
+  "short_name": "Bunker Surf",
+  "description": "Live surf conditions and expectations for Israel. Прогноз волн и ветра. תחזית גלים ורוח בישראל.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
