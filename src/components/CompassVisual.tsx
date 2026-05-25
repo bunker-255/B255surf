@@ -32,7 +32,7 @@ export function CompassVisual({ windDirection, waveDirection }: CompassVisualPro
 
       {/* Compass background */}
       <div 
-        className="relative w-64 h-64 rounded-full border-4 border-slate-700 bg-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-500 ease-out"
+        className="relative w-64 h-64 rounded-full border-4 border-slate-700 bg-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-75 ease-linear"
         style={{ transform: `rotate(${compassRotation}deg)` }}
       >
         {/* N / S / E / W markers */}

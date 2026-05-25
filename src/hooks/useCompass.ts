@@ -30,6 +30,17 @@ export function useCompass() {
   };
 
   useEffect(() => {
+    let hasAbsolute = false;
+
+    const handleAbsolute = (event: DeviceOrientationEvent) => {
+      let alpha = event.alpha;
+      if (alpha != null) {
+        hasAbsolute = true;
+        setHeading(processHeading(360 - alpha));
+        setIsAvailable(true);
+      }
+    };
+
     const handleOrientation = (event: DeviceOrientationEvent) => {
       let webkitHeading = (event as any).webkitCompassHeading;
       let alpha = event.alpha;
@@ -37,7 +48,7 @@ export function useCompass() {
       if (webkitHeading != null) {
         setHeading(processHeading(webkitHeading));
         setIsAvailable(true);
-      } else if (alpha != null) {
+      } else if (alpha != null && !hasAbsolute) {
         setHeading(processHeading(360 - alpha)); 
         setIsAvailable(true);
       }
@@ -45,16 +56,15 @@ export function useCompass() {
 
     if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
       if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-        // Handle iOS 13+ permission - this typically needs to be triggered by a user gesture.
-        // We will expose a method to request permission.
+        // Handle iOS 13+ permission - handled via button
       } else {
-        window.addEventListener('deviceorientationabsolute', handleOrientation as EventListener, true);
+        window.addEventListener('deviceorientationabsolute', handleAbsolute as EventListener, true);
         window.addEventListener('deviceorientation', handleOrientation, true);
       }
     }
 
     return () => {
-      window.removeEventListener('deviceorientationabsolute', handleOrientation as EventListener, true);
+      window.removeEventListener('deviceorientationabsolute', handleAbsolute as EventListener, true);
       window.removeEventListener('deviceorientation', handleOrientation, true);
     };
   }, []);
