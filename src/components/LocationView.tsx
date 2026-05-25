@@ -31,6 +31,7 @@ export function LocationView({ weather, selectedSpot, onSelectSpot, onEnableNoti
   const { lang, t } = useLanguage();
   const { prefs, updatePrefs, applyPreset } = usePreferences();
   const [isSaved, setIsSaved] = useState(false);
+  const [locationStatus, setLocationStatus] = useState<{ type: 'error' | 'success', message: string } | null>(null);
 
   useEffect(() => {
     if (isSaved) {
@@ -39,7 +40,15 @@ export function LocationView({ weather, selectedSpot, onSelectSpot, onEnableNoti
     }
   }, [isSaved]);
 
+  useEffect(() => {
+    if (locationStatus) {
+      const timer = setTimeout(() => setLocationStatus(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [locationStatus]);
+
   const handleLocateNearest = () => {
+    setLocationStatus(null);
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
@@ -55,9 +64,17 @@ export function LocationView({ weather, selectedSpot, onSelectSpot, onEnableNoti
         });
         
         onSelectSpot(closest);
+        setLocationStatus({ type: 'success', message: closest.name[lang] });
       }, (error) => {
         console.warn("Geolocation error:", error);
+        setLocationStatus({ type: 'error', message: error.message });
+      }, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
       });
+    } else {
+      setLocationStatus({ type: 'error', message: 'Geolocation is not supported by your browser' });
     }
   };
 
@@ -118,7 +135,13 @@ export function LocationView({ weather, selectedSpot, onSelectSpot, onEnableNoti
                <span className="hidden sm:inline">{t('nearestPola')}</span>
              </button>
            </div>
-             
+
+           {locationStatus && (
+             <div className={`mt-3 text-sm font-medium ${locationStatus.type === 'error' ? 'text-red-400' : 'text-emerald-400'}`}>
+                {locationStatus.type === 'success' ? `${t('currentSpot')}: ` : ''}{locationStatus.message}
+             </div>
+           )}
+
            <div className="rounded-xl overflow-hidden border border-slate-700/50 shadow-md">
              <SpotMap 
                spots={SPOTS} 

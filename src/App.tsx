@@ -61,6 +61,10 @@ export default function App() {
         setSelectedSpot(closest);
       }, (error) => {
         console.warn("Geolocation error:", error);
+      }, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
       });
     }
   }, []);
@@ -148,25 +152,31 @@ export default function App() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 pb-20 md:pb-0">
-          {activeTab === 'realtime' ? (
-            <RealTimeView 
-              weather={weather} 
-              selectedSpot={selectedSpot} 
-              onSelectSpot={setSelectedSpot} 
-              isLoading={isLoading}
-              onEnableNotifications={requestPermission}
-            />
-          ) : activeTab === 'forecast' ? (
-            <ForecastView weather={weather} isLoading={isLoading} />
-          ) : (
-            <LocationView
-              weather={weather}
-              selectedSpot={selectedSpot}
-              onSelectSpot={setSelectedSpot}
-              onEnableNotifications={requestPermission}
-            />
-          )}
+        <main className="flex-1 pb-24 md:pb-8 flex flex-col">
+          <div className="flex-1 relative">
+            {activeTab === 'realtime' ? (
+              <RealTimeView 
+                weather={weather} 
+                selectedSpot={selectedSpot} 
+                onSelectSpot={setSelectedSpot} 
+                isLoading={isLoading}
+                onEnableNotifications={requestPermission}
+              />
+            ) : activeTab === 'forecast' ? (
+              <ForecastView weather={weather} isLoading={isLoading} />
+            ) : (
+              <LocationView
+                weather={weather}
+                selectedSpot={selectedSpot}
+                onSelectSpot={setSelectedSpot}
+                onEnableNotifications={requestPermission}
+              />
+            )}
+          </div>
+          
+          <div className="mt-8 mb-4 md:mb-0 text-center text-xs text-slate-500/80 font-medium tracking-wide pointer-events-auto">
+            Promoted by <a href="https://bunker-255.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400/80 hover:text-indigo-300 transition-colors">bunker-255.com</a>
+          </div>
         </main>
       </div>
 
